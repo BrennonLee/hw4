@@ -192,16 +192,22 @@ contents = '''
 print contents
 
 states_caps = {
+		'CA':{'state':'California',     'capital':'Sacramento',     'lat':'38.5816',     'lng':'121.4944'},
+        'CO':{'state':'Colorado',       'capital':'Denver',     	'lat':'38.5816',     'lng':'121.4944'},
+        'CT':{'state':'Connecticut',    'capital':'Hartford',     	'lat':'Sacramento',  'lng':'Sacramento'},
+        'DE':{'state':'Deleware',       'capital':'Dover',     		'lat':'Sacramento',  'lng':'Sacramento'},
+}
+states_caps2 = {
         # 'AL':{'state':'Alabama',        'capital':'Montgomery'},
         # 'AK':{'state':'Alaska',         'capital':'Juneau'},
         # 'AZ':{'state':'Arizona',        'capital':'Phoenix'},
         #'AR':{'state':'Arkansas',       'capital':'Little Rock'},
-        'CA':{'state':'California',     'capital':'Sacramento',     'lat':'Sacramento',     'long':'Sacramento'},
-        'CO':{'state':'Colorado',       'capital':'Denver',     'lat':'Sacramento',     'long':'Sacramento'},
-        'CT':{'state':'Connecticut',    'capital':'Hartford',     'lat':'Sacramento',     'long':'Sacramento'},
-        'DE':{'state':'Deleware',       'capital':'Dover',     'lat':'Sacramento',     'long':'Sacramento'},
+        'CA':{'state':'California',     'capital':'Sacramento',     'lat':'38.5816',     'lng':'121.4944'},
+        'CO':{'state':'Colorado',       'capital':'Denver',     	'lat':'38.5816',     'lng':'121.4944'},
+        'CT':{'state':'Connecticut',    'capital':'Hartford',     	'lat':'Sacramento',  'lng':'Sacramento'},
+        'DE':{'state':'Deleware',       'capital':'Dover',     		'lat':'Sacramento',  'lng':'Sacramento'},
         #'FL':{'state':'Florida',        'capital':'Tallahassee'},
-        'GA':{'state':'Georgia',        'capital':'Atlanta',     'lat':'Sacramento',     'long':'Sacramento'},
+        'GA':{'state':'Georgia',        'capital':'Atlanta',     	'lat':'Sacramento',  'lng':'Sacramento'},
         # 'HI':{'state':'Hawaii',         'capital':'Honolulu'},
         # 'ID':{'state':'Idaho',          'capital':'Boise'},
         # 'IL':{'state':'Illinois',       'capital':'Springfield'},
@@ -255,7 +261,19 @@ $( document ).ready(function() {
 for state in states_caps:
 
 
-	print "$('#{0}').css('fill', 'red')".format(state)	# response2 = urllib2.urlopen('http://maps.googleapis.com/maps/api/geocode/json?address={0}.format(states_caps[state]["capital"])')
+	print "$('#{0}').css('fill', 'red')".format(state)
+
+
+	response = urllib2.urlopen("https://api.forecast.io/forecast/fa09c03820a16d3e4aebc5d343c9edd2/{0},{0}").format(state.lat, ["state"]["lng"])
+	data = json.load(response)
+
+
+
+	# Convert Unicode to plain Python string: "encode" using stackoverflow
+	new_data = [unicodedata.normalize('NFKD', i).encode('ascii','ignore') for i in data]
+	print new_data
+
+	# response2 = urllib2.urlopen('http://maps.googleapis.com/maps/api/geocode/json?address={0}.format(states_caps[state]["capital"])')
 	# data2 = json.load(response2)
 	# print data2
 	#ew_data2 = unicodedata.normalize('NFKD', data2).encode('ascii','ignore')
