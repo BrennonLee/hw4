@@ -191,24 +191,26 @@ contents = '''
 '''
 print contents
 
-states_caps = {
-		'CA':{'state':'California',     'capital':'Sacramento',     'lat':'38.5816',     'lng':'121.4944'},
-        'CO':{'state':'Colorado',       'capital':'Denver',     	'lat':'38.5816',     'lng':'121.4944'},
-        'CT':{'state':'Connecticut',    'capital':'Hartford',     	'lat':'Sacramento',  'lng':'Sacramento'},
-        'DE':{'state':'Deleware',       'capital':'Dover',     		'lat':'Sacramento',  'lng':'Sacramento'},
-}
-states_caps2 = {
+dicta = {
+  'CA': {'state':'California', 'capital':'Sacramento', 'lat':38.5816, 'lng':121.4944},
+  'CO': {'state':'Colorado', 'capital':'Denver', 'lat':39.7392, 'lng':104.9903},
+  'CT': {'state':'Connecticut', 'capital':'Hartford', 'lat':41.7637, 'lng':72.6851},
+  'DE': {'state':'Deleware', 'capital':'Dover', 'lat':38.9108, 'lng':75.5277},
+  'GA': {'state':'Georgia', 'capital':'Atlanta', 'lat':33.7490, 'lng':84.3880}, }
+
+
+# states_caps = {
         # 'AL':{'state':'Alabama',        'capital':'Montgomery'},
         # 'AK':{'state':'Alaska',         'capital':'Juneau'},
         # 'AZ':{'state':'Arizona',        'capital':'Phoenix'},
         #'AR':{'state':'Arkansas',       'capital':'Little Rock'},
-        'CA':{'state':'California',     'capital':'Sacramento',     'lat':'38.5816',     'lng':'121.4944'},
-        'CO':{'state':'Colorado',       'capital':'Denver',     	'lat':'38.5816',     'lng':'121.4944'},
-        'CT':{'state':'Connecticut',    'capital':'Hartford',     	'lat':'Sacramento',  'lng':'Sacramento'},
-        'DE':{'state':'Deleware',       'capital':'Dover',     		'lat':'Sacramento',  'lng':'Sacramento'},
-        #'FL':{'state':'Florida',        'capital':'Tallahassee'},
-        'GA':{'state':'Georgia',        'capital':'Atlanta',     	'lat':'Sacramento',  'lng':'Sacramento'},
-        # 'HI':{'state':'Hawaii',         'capital':'Honolulu'},
+        # 'CA':{'state':'California',     'capital':'Sacramento',     'lat':'38.5816',     'lng':'121.4944'},
+        # 'CO':{'state':'Colorado',       'capital':'Denver',     	'lat':'38.5816',     'lng':'121.4944'},
+        # 'CT':{'state':'Connecticut',    'capital':'Hartford',     	'lat':'Sacramento',  'lng':'Sacramento'},
+        # 'DE':{'state':'Deleware',       'capital':'Dover',     		'lat':'Sacramento',  'lng':'Sacramento'},
+        # #'FL':{'state':'Florida',        'capital':'Tallahassee'},
+        # 'GA':{'state':'Georgia',        'capital':'Atlanta',     	'lat':'Sacramento',  'lng':'Sacramento'},
+        # # 'HI':{'state':'Hawaii',         'capital':'Honolulu'},
         # 'ID':{'state':'Idaho',          'capital':'Boise'},
         # 'IL':{'state':'Illinois',       'capital':'Springfield'},
         # 'IN':{'state':'Indiana',        'capital':'Indianapolis'},
@@ -248,7 +250,7 @@ states_caps2 = {
         # 'WV':{'state':'West Virginia',  'capital':'Charleston'},
         # 'WI':{'state':'Wisconsin',      'capital':'Madison'},
         # 'WY':{'state':'Wyoming',        'capital':'Cheyenne'},
-    }
+    # }
 
 
 print response
@@ -257,19 +259,22 @@ print '''
 $( document ).ready(function() {
 '''
 #print "$('#CO').css('fill', 'red')"
+print dicta["CA"]["lat"]
 
-for state in states_caps:
 
-
+for state in dicta:
 	print "$('#{0}').css('fill', 'red')".format(state)
 
+	url = "https://api.forecast.io/forecast/fa09c03820a16d3e4aebc5d343c9edd2/{0},{1}".format(dicta[state]["lat"], dicta[state]["lng"])
+	#print url
 
-	response = urllib2.urlopen("https://api.forecast.io/forecast/fa09c03820a16d3e4aebc5d343c9edd2/{0},{0}").format(state.lat, ["state"]["lng"])
+	# print dicta[state]["lat"]
+	response = urllib2.urlopen("{0}".format(url))
 	data = json.load(response)
-
-
-
-	# Convert Unicode to plain Python string: "encode" using stackoverflow
+	#
+	#
+	#
+	# # Convert Unicode to plain Python string: "encode" using stackoverflow
 	new_data = [unicodedata.normalize('NFKD', i).encode('ascii','ignore') for i in data]
 	print new_data
 
