@@ -272,7 +272,7 @@ for state in dicta:
 	# print dicta[state]["lat"]
 	response2 = requests.get('{0}'.format(url)).json() #urllib2.urlopen("{0}".format(url))
 	x = response2['currently']['temperature']
-	print x
+	
 	if x < 10:
 		print "$('#{0}').css('fill', 'blue')".format(state)
 	elif x < 30:
