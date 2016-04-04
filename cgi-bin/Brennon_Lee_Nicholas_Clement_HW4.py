@@ -4,15 +4,16 @@ import cgitb
 import urllib2
 import json
 import unicodedata
+import requests
 
 cgitb.enable()
 
 #Taken from stackoverflow link
 response = urllib2.urlopen('https://api.forecast.io/forecast/fa09c03820a16d3e4aebc5d343c9edd2/37.8267,-122.423')
 data = json.load(response)
-
-
-# Convert Unicode to plain Python string: "encode" using stackoverflow
+#
+#
+#Convert Unicode to plain Python string: "encode" using stackoverflow
 new_data = [unicodedata.normalize('NFKD', i).encode('ascii','ignore') for i in data]
 
 
@@ -192,11 +193,11 @@ contents = '''
 print contents
 
 dicta = {
-  'CA': {'state':'California', 'capital':'Sacramento', 'lat':38.5816, 'lng':121.4944},
-  'CO': {'state':'Colorado', 'capital':'Denver', 'lat':39.7392, 'lng':104.9903},
-  'CT': {'state':'Connecticut', 'capital':'Hartford', 'lat':41.7637, 'lng':72.6851},
-  'DE': {'state':'Deleware', 'capital':'Dover', 'lat':38.9108, 'lng':75.5277},
-  'GA': {'state':'Georgia', 'capital':'Atlanta', 'lat':33.7490, 'lng':84.3880}, }
+  'CA': {'state':'California', 'capital':'Sacramento', 'lat':38.5816, 'lng':-121.4944},
+  'CO': {'state':'Colorado', 'capital':'Denver', 'lat':39.7392, 'lng':-104.9903},
+  'CT': {'state':'Connecticut', 'capital':'Hartford', 'lat':41.7637, 'lng':-72.6851},
+  'DE': {'state':'Deleware', 'capital':'Dover', 'lat':38.9108, 'lng':-75.5277},
+  'GA': {'state':'Georgia', 'capital':'Atlanta', 'lat':33.7490, 'lng':-84.3880}, }
 
 
 # states_caps = {
@@ -263,20 +264,27 @@ print dicta["CA"]["lat"]
 
 
 for state in dicta:
-	print "$('#{0}').css('fill', 'red')".format(state)
+	# print "$('#{0}').css('fill', 'red')".format(state)
 
 	url = "https://api.forecast.io/forecast/fa09c03820a16d3e4aebc5d343c9edd2/{0},{1}".format(dicta[state]["lat"], dicta[state]["lng"])
-	#print url
+	print url
 
 	# print dicta[state]["lat"]
-	response = urllib2.urlopen("{0}".format(url))
-	data = json.load(response)
-	#
-	#
-	#
-	# # Convert Unicode to plain Python string: "encode" using stackoverflow
-	new_data = [unicodedata.normalize('NFKD', i).encode('ascii','ignore') for i in data]
-	print new_data
+	response2 = requests.get('{0}'.format(url)).json() #urllib2.urlopen("{0}".format(url))
+	x = response2['currently']['temperature']
+	print x
+	if x < 10:
+		print "$('#{0}').css('fill', 'blue')".format(state)
+	elif x < 30:
+		print "$('#{0}').css('fill', 'cyan')".format(state)
+	elif x < 50:
+		print "$('#{0}').css('fill', 'green')".format(state)
+	elif x < 80:
+		print "$('#{0}').css('fill', 'orange')".format(state)
+	elif x<100:
+		print "$('#{0}').css('fill', 'red')".format(state)
+
+
 
 	# response2 = urllib2.urlopen('http://maps.googleapis.com/maps/api/geocode/json?address={0}.format(states_caps[state]["capital"])')
 	# data2 = json.load(response2)
@@ -284,7 +292,7 @@ for state in dicta:
 	#ew_data2 = unicodedata.normalize('NFKD', data2).encode('ascii','ignore')
 	#print data2['results'][0]["geometry"]["location"]
 
-	#x = data2['results'][0]["geometry"]["location"]
+	#x = data2['currently'][0]["geometry"]["location"]
 
 print '''
 });
